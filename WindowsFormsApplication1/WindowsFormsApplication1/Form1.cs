@@ -17,9 +17,13 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+            dataGridView1.RowCount = 8; dataGridView2.RowCount = 8;
+            //dataGridView1.AutoSize = true;
+
 
 
         }
+
         //пытался писать понятный код//
         public static void BitmapToByteRgb(ref Bitmap bmp, ref byte[,,] Grafikbyte)
         {
@@ -156,6 +160,8 @@ namespace WindowsFormsApplication1
             Array.Clear(S, 0, S.Length);
             Array.Clear(Bufer, 0, Bufer.Length);
         }
+
+        
     }
 }
 
