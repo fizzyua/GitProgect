@@ -75,6 +75,34 @@ namespace WindowsFormsApplication1
 
                     }
 
+       
+        public static double[] FastWalsTransform <T>( ref T [] Image, ref int[,] Matrix_of_Uolsh)
+        {
+            double[] Resultat = new double[Image.Length];
+
+            for (int j = 0; j < Image.Length; j += 256)
+                for (int i = 0; i < 256; i++)
+                    for (int k = 0; k < 256; k++)
+                    {
+                        Resultat[i + j] += Convert.ToDouble(Convert.ToInt16(Image[k + j]) * Matrix_of_Uolsh[i, k]) / 16;
+                    }
+
+                        return Resultat;
+        }
+
+        public static double[] WHT_double_in_byte(ref double[] Masiv, ref int[,] Matrix_of_Uolsh)
+        {
+            double[] WHT_Masiv = new double[Masiv.Length];
+
+            for (int j = 0; j < Masiv.Length; j += 256)
+                for (int i = 0; i < 256; i++)
+                    for (int k = 0; k < 256; k++)
+                    {
+                        WHT_Masiv[i + j] += Convert.ToDouble(Masiv[k + j] * Matrix_of_Uolsh[i, k]);
+                    }
+
+            return WHT_Masiv;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
