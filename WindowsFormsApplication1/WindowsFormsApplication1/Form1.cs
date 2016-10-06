@@ -17,9 +17,10 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
-            
+
 
         }
+        //пытался писать понятный код//
         public static void BitmapToByteRgb(ref Bitmap bmp, ref byte[,,] Grafikbyte)
         {
             int width = bmp.Width,
@@ -37,19 +38,19 @@ namespace WindowsFormsApplication1
                     Grafikbyte[2, y, x] = color.B;
                 }
             }
-        }
-      
-        public static void ByteRgbToBitmap( ref byte [,,] byteOfPicture, ref int width, ref int height, ref Bitmap Picture)
-            {
-             Picture = new Bitmap(width, height);
+        }//картинку в масив байтов
+
+        public static void ByteRgbToBitmap(ref byte[,,] byteOfPicture, ref int width, ref int height, ref Bitmap Picture)
+        {
+            Picture = new Bitmap(width, height);
             for (int x = 0; x < height; x++)
                 for (int y = 0; y < width; y++)
                 {
                     Picture.SetPixel(y, x, Color.FromArgb(byteOfPicture[0, x, y], byteOfPicture[1, x, y], byteOfPicture[2, x, y]));
                 }
-        }
-        
-        public static void ThreeToOne <T> (ref T [,,] byteOfPicture3,ref int width, ref int height, ref T [] byteOfPicture1)
+        }//масив байтов в картинку
+
+        public static void ThreeToOne<T>(ref T[,,] byteOfPicture3, ref int width, ref int height, ref T[] byteOfPicture1)
         {
             byteOfPicture1 = new T[3 * width * height];
             for (int i = 0; i < 3; i++)
@@ -59,10 +60,10 @@ namespace WindowsFormsApplication1
                         byteOfPicture1[i * height * width + j * width + k] = byteOfPicture3[i, j, k];
                     }
 
-       }
+        }//трехмерный масив в одномерный
 
-   
-        public static void OneToThree <T> ( ref T [] byteOfPicture1,ref int width,ref int height, ref T[,,] byteOfPicture3)
+
+        public static void OneToThree<T>(ref T[] byteOfPicture1, ref int width, ref int height, ref T[,,] byteOfPicture3)
         {
             byteOfPicture3 = new T[3, height, width];
             for (int i = 0; i < 3; i++)
@@ -73,10 +74,10 @@ namespace WindowsFormsApplication1
                     }
 
 
-                    }
+        }//одномерный масив в трехмерный
 
-       
-        public static double[] FastWalsTransform <T>( ref T [] Image, ref int[,] Matrix_of_Uolsh)
+
+        public static double[] FastWalsTransform<T>(ref T[] Image, ref int[,] Matrix_of_Uolsh)
         {
             double[] Resultat = new double[Image.Length];
 
@@ -84,11 +85,11 @@ namespace WindowsFormsApplication1
                 for (int i = 0; i < 256; i++)
                     for (int k = 0; k < 256; k++)
                     {
-                        Resultat[i + j] += Convert.ToDouble(Convert.ToInt16(Image[k + j]) * Matrix_of_Uolsh[i, k]) / 16;
+                        Resultat[i + j] += Convert.ToDouble(Convert.ToInt16(Image[k + j]) * Matrix_of_Uolsh[i, k]) / 256;
                     }
 
-                        return Resultat;
-        }
+            return Resultat;
+        }//прямое преобразование Уолша
 
         public static double[] WHT_double_in_byte(ref double[] Masiv, ref int[,] Matrix_of_Uolsh)
         {
@@ -102,6 +103,23 @@ namespace WindowsFormsApplication1
                     }
 
             return WHT_Masiv;
+        }//обратоное преобразование уолша
+
+        public static void swapRowsColumns(ref double[] rgbImage, int width)
+        {
+            for (int chanel = 0; chanel < 3; chanel++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = x + 1; y < width; y++)
+                    {
+                        double temp = rgbImage[chanel * width * width + y * width + x];
+                        double b = rgbImage[chanel * width * width + x * width + y];
+                        rgbImage[chanel * width * width + y * width + x] = b;
+                        rgbImage[chanel * width * width + x * width + y] = temp;
+                    }
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -120,6 +138,24 @@ namespace WindowsFormsApplication1
             }
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            byte[] Bufer = new byte[3 * width * height];
+            ThreeToOne(ref byteOfPicture, ref width, ref height, ref Bufer);
+            string[] S = new string[3 * width * height];
+            
+            for (int i = 0; i < Bufer.Length; i++)
+            {
+                S[i] = Convert.ToString(Bufer[i]);
+            }
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName+".txt", S);             
+            }
+            Array.Clear(S, 0, S.Length);
+            Array.Clear(Bufer, 0, Bufer.Length);
+        }
     }
-    }
+}
 
