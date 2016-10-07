@@ -124,6 +124,18 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
+        }//Разворот масива
+
+        public static void GenereteBasisOfWals(ref int[,] IndexMatrix, ref int[,] BasisOfWalsh)
+        {
+            BasisOfWalsh = new int[256, 256];
+            for (int i = 0; i < 8; i++) 
+                for(int j = 0; j < 8; j++)
+                {
+                    BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7-i, j];//запонение 2^n-го числа 
+                }
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -161,7 +173,18 @@ namespace WindowsFormsApplication1
             Array.Clear(Bufer, 0, Bufer.Length);
         }
 
-        
+        private void button3_Click(object sender, EventArgs e)
+        {
+            byte[] bufer = new byte[3 * width * height];
+            ThreeToOne(ref byteOfPicture, ref width, ref height, ref bufer);
+           double[] MasivRates = new double [3 * width * height];
+
+            int[,] firstBasis = new int[256, 256];
+            int [,] secondBasis =  new int[256, 256];
+
+            MasivRates = FastWalsTransform(ref bufer, ref firstBasis);
+
+        }
     }
 }
 
