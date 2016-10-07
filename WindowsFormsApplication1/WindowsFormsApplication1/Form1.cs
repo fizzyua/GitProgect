@@ -109,7 +109,7 @@ namespace WindowsFormsApplication1
             return WHT_Masiv;
         }//обратоное преобразование уолша
 
-        public static void swapRowsColumns(ref double[] rgbImage, int width)
+        public static void swapRowsColumns <T>(ref T[] rgbImage, int width)
         {
             for (int chanel = 0; chanel < 3; chanel++)
             {
@@ -117,8 +117,8 @@ namespace WindowsFormsApplication1
                 {
                     for (int y = x + 1; y < width; y++)
                     {
-                        double temp = rgbImage[chanel * width * width + y * width + x];
-                        double b = rgbImage[chanel * width * width + x * width + y];
+                        T temp = rgbImage[chanel * width * width + y * width + x];
+                        T b = rgbImage[chanel * width * width + x * width + y];
                         rgbImage[chanel * width * width + y * width + x] = b;
                         rgbImage[chanel * width * width + x * width + y] = temp;
                     }
@@ -126,17 +126,36 @@ namespace WindowsFormsApplication1
             }
         }//Разворот масива
 
-        public static void GenereteBasisOfWals(ref int[,] IndexMatrix, ref int[,] BasisOfWalsh)
-        {
-            BasisOfWalsh = new int[256, 256];
-            for (int i = 0; i < 8; i++) 
-                for(int j = 0; j < 8; j++)
-                {
-                    BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7-i, j];//запонение 2^n-го числа 
-                }
+       // public static void GenereteBasisOfWals(ref int[,] IndexMatrix, ref int[,] BasisOfWalsh)
+       // {
+       //     BasisOfWalsh = new int[256, 256];
+       //     for (int i = 0; i < 8; i++)
+       //         for (int j = 0; j < 8; j++)
+       //         {
+       //             BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7 - i, j];//запонение 2^n-го числа 
+       //         }
+       //     for(int j = 1; j < 256; j++)
+       //     for (int i = 1; i < 256; i++)
+       //     {
+       //         if (BasisOfWalsh[j, i] == null)
+       //         {
+       //             for (int k = 128; k > 1; k = k / 2)
+       //             {
+       //                 int m = i;
+       //                 if (k < m)
+       //                 {
+       //                     BasisOfWalsh[j, i] += BasisOfWalsh[j, k];
+       //                 }
+       //             }
+       //         }
+       //     }
+       //}//Создание базиса на основе индексной матрици
+                
 
 
-        }
+
+
+       
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -179,10 +198,18 @@ namespace WindowsFormsApplication1
             ThreeToOne(ref byteOfPicture, ref width, ref height, ref bufer);
            double[] MasivRates = new double [3 * width * height];
 
-            int[,] firstBasis = new int[256, 256];
-            int [,] secondBasis =  new int[256, 256];
 
-            MasivRates = FastWalsTransform(ref bufer, ref firstBasis);
+            int[,] firstMatrix = new int[8, 8];
+            int[,] firstBasis = new int[256, 256];
+
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
+
+                }
+
+         
 
         }
     }
