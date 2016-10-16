@@ -13,7 +13,9 @@ namespace WindowsFormsApplication1
     {
         int width;
         int height;
-        byte[,,] byteOfPicture;
+        byte[,,] byteOfPicture;//картинка
+        double[] coefficients;//весовые кофиценты
+
 
         public Form1()
         {
@@ -58,13 +60,6 @@ namespace WindowsFormsApplication1
             for (int i = 7; i < 8; i++) dataGridView2.Rows[7].Cells[7 - i].Style.BackColor = Color.DarkGray;
         }
 
-
-
-
-
-
-
-        //пытался писать понятный код//
         public static void BitmapToByteRgb(ref Bitmap bmp, ref byte[,,] Grafikbyte)
         {
             int width = bmp.Width,
@@ -311,7 +306,17 @@ namespace WindowsFormsApplication1
 
                 }
             GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
-            FastWalsTransform<double>(ref MasivRates, ref firstBasis);
+            MasivRates=FastWalsTransform<double>(ref MasivRates, ref firstBasis);
+            Array.Clear(bufer, 0, bufer.Length);
+            string[] S = new string[3 * width * height];
+            for(int i = 0; i < MasivRates.Length; i++)
+            {
+                S[i] = Convert.ToString(MasivRates[i]);
+            }
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", S);
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
