@@ -14,15 +14,55 @@ namespace WindowsFormsApplication1
         int width;
         int height;
         byte[,,] byteOfPicture;
+
         public Form1()
         {
             InitializeComponent();
             dataGridView1.RowCount = 8; dataGridView2.RowCount = 8;
-            //dataGridView1.AutoSize = true;
 
+            label3.Text = "Det= 0";
+            label4.Text = "Det= 0";
 
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    dataGridView1.Rows[i].Cells[j].Value = "0";
+                }
+            }
 
+            for (int i = 0; i < 8; i++) dataGridView1.Rows[0].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 1; i < 8; i++) dataGridView1.Rows[1].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 2; i < 8; i++) dataGridView1.Rows[2].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 3; i < 8; i++) dataGridView1.Rows[3].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 4; i < 8; i++) dataGridView1.Rows[4].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 5; i < 8; i++) dataGridView1.Rows[5].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 6; i < 8; i++) dataGridView1.Rows[6].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 7; i < 8; i++) dataGridView1.Rows[7].Cells[7 - i].Style.BackColor = Color.DarkGray;
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    dataGridView2.Rows[i].Cells[j].Value = "0";
+                }
+            }
+
+            for (int i = 0; i < 8; i++) dataGridView2.Rows[0].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 1; i < 8; i++) dataGridView2.Rows[1].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 2; i < 8; i++) dataGridView2.Rows[2].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 3; i < 8; i++) dataGridView2.Rows[3].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 4; i < 8; i++) dataGridView2.Rows[4].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 5; i < 8; i++) dataGridView2.Rows[5].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 6; i < 8; i++) dataGridView2.Rows[6].Cells[7 - i].Style.BackColor = Color.DarkGray;
+            for (int i = 7; i < 8; i++) dataGridView2.Rows[7].Cells[7 - i].Style.BackColor = Color.DarkGray;
         }
+
+
+
+
+
+
 
         //пытался писать понятный код//
         public static void BitmapToByteRgb(ref Bitmap bmp, ref byte[,,] Grafikbyte)
@@ -109,7 +149,7 @@ namespace WindowsFormsApplication1
             return WHT_Masiv;
         }//обратоное преобразование уолша
 
-        public static void swapRowsColumns <T>(ref T[] rgbImage, int width)
+        public static void swapRowsColumns<T>(ref T[] rgbImage, int width)
         {
             for (int chanel = 0; chanel < 3; chanel++)
             {
@@ -126,36 +166,96 @@ namespace WindowsFormsApplication1
             }
         }//Разворот масива
 
-       // public static void GenereteBasisOfWals(ref int[,] IndexMatrix, ref int[,] BasisOfWalsh)
-       // {
-       //     BasisOfWalsh = new int[256, 256];
-       //     for (int i = 0; i < 8; i++)
-       //         for (int j = 0; j < 8; j++)
-       //         {
-       //             BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7 - i, j];//запонение 2^n-го числа 
-       //         }
-       //     for(int j = 1; j < 256; j++)
-       //     for (int i = 1; i < 256; i++)
-       //     {
-       //         if (BasisOfWalsh[j, i] == null)
-       //         {
-       //             for (int k = 128; k > 1; k = k / 2)
-       //             {
-       //                 int m = i;
-       //                 if (k < m)
-       //                 {
-       //                     BasisOfWalsh[j, i] += BasisOfWalsh[j, k];
-       //                 }
-       //             }
-       //         }
-       //     }
-       //}//Создание базиса на основе индексной матрици
-                
+        public static void GenereteBasisOfWals(ref int[,] IndexMatrix, ref int[,] BasisOfWalsh)
+        {
+            BasisOfWalsh = new int[256, 256];
+            for (int a = 0; a < 256; a++)
+                for (int b = 0; b < 256; b++)
+                {
+                    BasisOfWalsh[a, b] = -1;
+                }
 
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7 - i, j];//запонение 2^n-го числа 
+                }
+            for (int j = 1; j < 256; j++)
+                for (int i = 1; i < 256; i++)
+                {
+                    if (BasisOfWalsh[j, i] == -1)
+                    {
+                        int n = i;
+                        BasisOfWalsh[j, i] = 0;
+                        for (int k = 128; k >= 1; k = k / 2)
+                        {
+                            if (k <= n)
+                            {
+                                BasisOfWalsh[j, i] += BasisOfWalsh[j, k];
+                                n = n - k;
+                            }
+                        }
+                    }
+                }
+            for (int j = 1; j < 256; j++)
+                for (int i = 1; i < 256; i++)
+                {
+                    if (BasisOfWalsh[i, j] == -1)
+                    {
+                        int n = j;
+                        BasisOfWalsh[i, j] = 0;
+                        for (int k = 128; k >= 1; k = k / 2)
+                        {
+                            if (k <= n)
+                            {
+                                BasisOfWalsh[i, j] += BasisOfWalsh[i, k];
+                                n = n - k;
+                            }
+                        }
+                    }
+                }
+            for (int i = 0; i < 256; i++)
+            {
+                BasisOfWalsh[0, i] = 0;
+                BasisOfWalsh[i, 0] = 0;
+            }
+        }//Создание базиса на основе индексной матрици
 
+        public static double[,] GetMinor(double[,] matrix, int row, int column)
+        {
+            if (matrix.GetLength(0) != matrix.GetLength(1)) throw new Exception(" Число строк в матрице не совпадает с числом столбцов");
+            double[,] buf = new double[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    if ((i != row) || (j != column))
+                    {
+                        if (i > row && j < column) buf[i - 1, j] = matrix[i, j];
+                        if (i < row && j > column) buf[i, j - 1] = matrix[i, j];
+                        if (i > row && j > column) buf[i - 1, j - 1] = matrix[i, j];
+                        if (i < row && j < column) buf[i, j] = matrix[i, j];
+                    }
+                }
+            return buf;
+        }
+  
+        public static double Determ(double[,] matrix)
+        {
+            if (matrix.GetLength(0) != matrix.GetLength(1)) throw new Exception(" Число строк в матрице не совпадает с числом столбцов");
+            double det = 0;
+            int Rank = matrix.GetLength(0);
+            if (Rank == 1) det = matrix[0, 0];
+            if (Rank == 2) det = matrix[0, 0] * matrix[1, 1] - matrix[0, 1] * matrix[1, 0];
+            if (Rank > 2)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    det += Math.Pow(-1, 0 + j) * matrix[0, j] * Determ(GetMinor(matrix, 0, j));
+                }
+            }
+            return det;
+        }
 
-
-       
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -172,21 +272,23 @@ namespace WindowsFormsApplication1
                 pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             }
 
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             byte[] Bufer = new byte[3 * width * height];
             ThreeToOne(ref byteOfPicture, ref width, ref height, ref Bufer);
+
             string[] S = new string[3 * width * height];
-            
+
             for (int i = 0; i < Bufer.Length; i++)
             {
                 S[i] = Convert.ToString(Bufer[i]);
             }
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllLines(saveFileDialog1.FileName+".txt", S);             
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", S);
             }
             Array.Clear(S, 0, S.Length);
             Array.Clear(Bufer, 0, Bufer.Length);
@@ -196,7 +298,7 @@ namespace WindowsFormsApplication1
         {
             byte[] bufer = new byte[3 * width * height];
             ThreeToOne(ref byteOfPicture, ref width, ref height, ref bufer);
-           double[] MasivRates = new double [3 * width * height];
+            double[] MasivRates = new double[3 * width * height];
 
 
             int[,] firstMatrix = new int[8, 8];
@@ -208,10 +310,128 @@ namespace WindowsFormsApplication1
                     firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
 
                 }
+            GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
+            FastWalsTransform<double>(ref MasivRates, ref firstBasis);
+        }
 
-         
+        private void button4_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            int[,] FirsrIndexMatrix = new int[8, 8];
+            int[,] FirstBasisOfWalsh = new int[256, 256];
+            string[] bufer = new string[256 * 256];
+
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    FirsrIndexMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
+                }
+            GenereteBasisOfWals(ref FirsrIndexMatrix, ref FirstBasisOfWalsh);
+
+            for (int i = 0; i < 256; i++)
+                for (int j = 0; j < 256; j++)
+                {
+                    bufer[i + 256 * j] = Convert.ToString(FirstBasisOfWalsh[i, j]);
+                }
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", bufer);
+            }
+
+        }
+
+        
+
+        private void dataGridView1_CellClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+            double[,] Matrix = new double[8, 8];
+
+            if ((e.RowIndex == 0 && e.ColumnIndex < 8) || (e.RowIndex == 1 && e.ColumnIndex < 7) || (e.RowIndex == 2 && e.ColumnIndex < 6) || (e.RowIndex == 3 && e.ColumnIndex < 5) || (e.RowIndex == 4 && e.ColumnIndex < 4) || (e.RowIndex == 5 && e.ColumnIndex < 3) || (e.RowIndex == 6 && e.ColumnIndex < 2) || (e.RowIndex == 7 && e.ColumnIndex < 1))
+            {
+                if (Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == "0")
+                {
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 1;
+                    dataGridView1.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 1;
+                    for (int i = 0; i < 8; i++)
+                        for (int j = 0; j < 8; j++)
+                        {
+                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
+                        }
+                    double det;
+                    det = Determ(Matrix);
+                    label3.Text = "Det= " +Convert.ToString(det);
+                }
+                else
+                {
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 0;
+                    dataGridView1.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 0;
+                    for (int i = 0; i < 8; i++)
+                        for (int j = 0; j < 8; j++)
+                        {
+                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
+                        }
+                    double det;
+                    det = Determ(Matrix);
+                    label3.Text = "Det= " + Convert.ToString(det);
+                }
+            }
+        }
+
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            double[,] Matrix = new double[8, 8];
+
+            if ((e.RowIndex == 0 && e.ColumnIndex < 8) || (e.RowIndex == 1 && e.ColumnIndex < 7) || (e.RowIndex == 2 && e.ColumnIndex < 6) || (e.RowIndex == 3 && e.ColumnIndex < 5) || (e.RowIndex == 4 && e.ColumnIndex < 4) || (e.RowIndex == 5 && e.ColumnIndex < 3) || (e.RowIndex == 6 && e.ColumnIndex < 2) || (e.RowIndex == 7 && e.ColumnIndex < 1))
+            {
+                if (Convert.ToString(dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == "0")
+                {
+                    dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 1;
+                    dataGridView2.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 1;
+                    for (int i = 0; i < 8; i++)
+                        for (int j = 0; j < 8; j++)
+                        {
+                            Matrix[i, j] = Convert.ToDouble(dataGridView2.Rows[j].Cells[i].Value);
+                        }
+                    double det;
+                    det = Determ(Matrix);
+                    label4.Text = "Det= " + Convert.ToString(det);
+                }
+
+                else
+                {
+                    dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 0;
+                    dataGridView2.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 0;
+                    for (int i = 0; i < 8; i++)
+                        for (int j = 0; j < 8; j++)
+                        {
+                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
+                        }
+                    double det;
+                    det = Determ(Matrix);
+                    label4.Text = "Det= " + Convert.ToString(det);
+
+
+                }
+
+            }
         }
     }
 }
+
 
