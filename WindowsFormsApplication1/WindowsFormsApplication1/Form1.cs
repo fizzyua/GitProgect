@@ -176,7 +176,7 @@ namespace WindowsFormsApplication1
                     BasisOfWalsh[(int)Math.Pow(2, i), (int)Math.Pow(2, j)] = IndexMatrix[7 - i, j];
                 }
 
-            for (int j = 1; j < 256; j++)
+            for (int j = 1; j < 256; j=j*2)
                 for (int i = 1; i < 256; i++)
                 {
                     
@@ -194,24 +194,25 @@ namespace WindowsFormsApplication1
                         }
                     }
                 }
-            //for (int j = 1; j < 256; j++)
-            //    for (int i = 1; i < 256; i++)
-            //    {
-            //        BasisOfWalsh[j, i] = 0;
-            //        if (BasisOfWalsh[i, j] == -1)
-            //        {
-            //            BasisOfWalsh[j, i] = 0;
-            //            int n = j;
-            //            for (int k = 128; k >= 1; k = k / 2)
-            //            {
-            //                if (k <= n)
-            //                {
-            //                    BasisOfWalsh[i, j] += BasisOfWalsh[i, k];
-            //                    n = n - k;
-            //                }
-            //            }
-            //        }
-            //    }
+
+            for (int j = 1; j < 256; j++)
+                for (int i = 1; i < 256; i++)
+                {
+                    if (BasisOfWalsh[i, j] == -1)
+                    {
+                        BasisOfWalsh[i, j] = 0;
+                        int n = i;
+                        for (int k = 128; k >= 1; k = k / 2)
+                        {
+                        if (k <= n)
+                        {
+                            BasisOfWalsh[i, j] += (int)BasisOfWalsh[k, j];
+                                n = n - k;
+                            }
+                        }
+                    }
+                }
+
             for (int i = 0; i < 256; i++)
             {
                 BasisOfWalsh[0, i] = 1;
@@ -221,7 +222,14 @@ namespace WindowsFormsApplication1
                 for (int b = 1; b < 256; b++)
                 {
                     BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
+                    
                 }
+            for (int a = 0; a < 256; a++)
+                for (int b = 0; b < 256; b++)
+                {
+                    if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+                }
+
 
         }//Создание базиса на основе индексной матрици
 
@@ -241,7 +249,7 @@ namespace WindowsFormsApplication1
                     }
                 }
             return buf;
-        }
+        }//минор Матрици
   
         public static double Determ(double[,] matrix)
         {
@@ -258,7 +266,7 @@ namespace WindowsFormsApplication1
                 }
             }
             return det;
-        }
+        }//Поиск опредилителя матрици
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -310,8 +318,7 @@ namespace WindowsFormsApplication1
             int[,] firstMatrix = new int[8, 8];
             int[,] firstBasis = new int[256, 256];
 
-            int[,] secondMatrix = new int[8, 8];
-            int[,] secondBasis = new int[256, 256];
+           
 
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
@@ -323,6 +330,8 @@ namespace WindowsFormsApplication1
             coefficientsOfWalsh = FastWalsTransform(ref buferImage, ref firstBasis);
 
             Array.Clear(buferImage, 0, buferImage.Length);
+
+           
 
             //swapRowsColumns(ref array, width);
             //for (int i = 0; i < 8; i++)

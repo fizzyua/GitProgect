@@ -74,7 +74,7 @@
             this.button1.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Location = new System.Drawing.Point(2, 288);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(119, 51);
+            this.button1.Size = new System.Drawing.Size(109, 40);
             this.button1.TabIndex = 0;
             this.button1.Text = "Open picture";
             this.button1.UseVisualStyleBackColor = true;
@@ -97,9 +97,9 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(127, 288);
+            this.button2.Location = new System.Drawing.Point(140, 288);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 51);
+            this.button2.Size = new System.Drawing.Size(109, 40);
             this.button2.TabIndex = 2;
             this.button2.Text = "Save byte array of input picture";
             this.button2.UseVisualStyleBackColor = true;
@@ -200,7 +200,7 @@
             this.dataGridViewTextBoxColumn6,
             this.dataGridViewTextBoxColumn7,
             this.dataGridViewTextBoxColumn8});
-            this.dataGridView2.Location = new System.Drawing.Point(484, 108);
+            this.dataGridView2.Location = new System.Drawing.Point(484, 103);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
@@ -279,7 +279,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(526, 91);
+            this.label2.Location = new System.Drawing.Point(529, 86);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 14);
             this.label2.TabIndex = 6;
@@ -321,9 +321,9 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button6.Location = new System.Drawing.Point(821, 290);
+            this.button6.Location = new System.Drawing.Point(829, 289);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(119, 49);
+            this.button6.Size = new System.Drawing.Size(111, 40);
             this.button6.TabIndex = 10;
             this.button6.Text = "Save byte array of output picture";
             this.button6.UseVisualStyleBackColor = true;
@@ -332,7 +332,7 @@
             // button7
             // 
             this.button7.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button7.Location = new System.Drawing.Point(255, 301);
+            this.button7.Location = new System.Drawing.Point(255, 296);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(140, 25);
             this.button7.TabIndex = 12;
@@ -343,7 +343,7 @@
             // button8
             // 
             this.button8.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button8.Location = new System.Drawing.Point(484, 301);
+            this.button8.Location = new System.Drawing.Point(484, 297);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(149, 24);
             this.button8.TabIndex = 13;
@@ -353,7 +353,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(401, 307);
+            this.label3.Location = new System.Drawing.Point(401, 302);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 14;
@@ -362,7 +362,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(639, 306);
+            this.label4.Location = new System.Drawing.Point(639, 301);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 15;
@@ -373,7 +373,7 @@
             this.button9.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button9.Location = new System.Drawing.Point(693, 288);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(119, 51);
+            this.button9.Size = new System.Drawing.Size(109, 40);
             this.button9.TabIndex = 16;
             this.button9.Text = "Save picture";
             this.button9.UseVisualStyleBackColor = true;
@@ -392,7 +392,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(944, 342);
+            this.ClientSize = new System.Drawing.Size(944, 331);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.label4);
