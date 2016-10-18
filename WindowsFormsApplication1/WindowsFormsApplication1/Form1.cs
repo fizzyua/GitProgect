@@ -173,15 +173,17 @@ namespace WindowsFormsApplication1
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                 {
-                    BasisOfWalsh[2 ^ i, 2 ^ j] = IndexMatrix[7 - i, j];//запонение 2^n-го числа 
+                    BasisOfWalsh[(int)Math.Pow(2, i), (int)Math.Pow(2, j)] = IndexMatrix[7 - i, j];
                 }
             for (int j = 1; j < 256; j++)
                 for (int i = 1; i < 256; i++)
                 {
+                     
                     if (BasisOfWalsh[j, i] == -1)
                     {
-                        int n = i;
                         BasisOfWalsh[j, i] = 0;
+                        int n = i;
+                       
                         for (int k = 128; k >= 1; k = k / 2)
                         {
                             if (k <= n)
@@ -195,10 +197,11 @@ namespace WindowsFormsApplication1
             for (int j = 1; j < 256; j++)
                 for (int i = 1; i < 256; i++)
                 {
+                   
                     if (BasisOfWalsh[i, j] == -1)
                     {
                         int n = j;
-                        BasisOfWalsh[i, j] = 0;
+                        
                         for (int k = 128; k >= 1; k = k / 2)
                         {
                             if (k <= n)
@@ -211,9 +214,15 @@ namespace WindowsFormsApplication1
                 }
             for (int i = 0; i < 256; i++)
             {
-                BasisOfWalsh[0, i] = 0;
-                BasisOfWalsh[i, 0] = 0;
+                BasisOfWalsh[0, i] = 1;
+                BasisOfWalsh[i, 0] = 1;
             }
+            for (int a = 0; a < 256; a++)
+                for (int b = 0; b < 256; b++)
+                {
+                    BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
+                }
+
         }//Создание базиса на основе индексной матрици
 
         public static double[,] GetMinor(double[,] matrix, int row, int column)
@@ -293,8 +302,51 @@ namespace WindowsFormsApplication1
         {
             byte[] bufer = new byte[3 * width * height];
             ThreeToOne(ref byteOfPicture, ref width, ref height, ref bufer);
-            double[] MasivRates = new double[3 * width * height];
+           // double[] array = new double[3 * width * height];
 
+
+            int[,] firstMatrix = new int[8, 8];
+            int[,] firstBasis = new int[256, 256];
+
+            int[,] secondMatrix = new int[8, 8];
+            int[,] secondBasis = new int[256, 256];
+
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
+
+                }
+            GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
+
+            coefficients = FastWalsTransform(ref bufer, ref firstBasis);
+
+            Array.Clear(bufer, 0, bufer.Length);
+
+            //swapRowsColumns(ref array, width);
+            //for (int i = 0; i < 8; i++)
+            //    for (int j = 0; j < 8; j++)
+            //    {
+            //        secondMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
+
+            //    }
+            //GenereteBasisOfWals(ref secondMatrix, ref secondBasis);
+
+            //coefficients = FastWalsTransform(ref array, ref secondBasis);
+
+
+
+        }
+
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            double[] Image = new double[3 * width * height];
 
             int[,] firstMatrix = new int[8, 8];
             int[,] firstBasis = new int[256, 256];
@@ -306,26 +358,7 @@ namespace WindowsFormsApplication1
 
                 }
             GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
-            MasivRates=FastWalsTransform<double>(ref MasivRates, ref firstBasis);
-            Array.Clear(bufer, 0, bufer.Length);
-            string[] S = new string[3 * width * height];
-            for(int i = 0; i < MasivRates.Length; i++)
-            {
-                S[i] = Convert.ToString(MasivRates[i]);
-            }
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", S);
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
+            Image = WHT_double_in_byte(ref coefficients,ref firstBasis);
 
         }
 
