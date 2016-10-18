@@ -222,15 +222,10 @@ namespace WindowsFormsApplication1
                 for (int b = 1; b < 256; b++)
                 {
                     BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
-                    
-                }
-            for (int a = 0; a < 256; a++)
-                for (int b = 0; b < 256; b++)
-                {
                     if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+
                 }
-
-
+      
         }//Создание базиса на основе индексной матрици
 
         public static double[,] GetMinor(double[,] matrix, int row, int column)
@@ -273,20 +268,13 @@ namespace WindowsFormsApplication1
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-
-
                 Bitmap image1 = new Bitmap(openFileDialog1.FileName);
                 width = image1.Width;
                 height = image1.Height;
                 BitmapToByteRgb(ref image1, ref byteOfPicture);
-
-                pictureBox1.Image = System.Drawing.Bitmap.FromFile(openFileDialog1.FileName);
-                //pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                    
+                pictureBox1.Image = System.Drawing.Bitmap.FromFile(openFileDialog1.FileName);                
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;                   
             }
-
-
         }
 
         private void button2_Click(object sender, EventArgs e)
