@@ -14,7 +14,7 @@ namespace WindowsFormsApplication1
         int width;
         int height;
         byte[,,] byteOfPicture;//картинка
-        double[] coefficients;//весовые кофиценты
+        double[] coefficientsOfWalsh;//весовые кофиценты
 
 
         public Form1()
@@ -175,15 +175,15 @@ namespace WindowsFormsApplication1
                 {
                     BasisOfWalsh[(int)Math.Pow(2, i), (int)Math.Pow(2, j)] = IndexMatrix[7 - i, j];
                 }
+
             for (int j = 1; j < 256; j++)
                 for (int i = 1; i < 256; i++)
                 {
-                     
+                    
                     if (BasisOfWalsh[j, i] == -1)
                     {
                         BasisOfWalsh[j, i] = 0;
-                        int n = i;
-                       
+                        int n = i;                      
                         for (int k = 128; k >= 1; k = k / 2)
                         {
                             if (k <= n)
@@ -194,31 +194,31 @@ namespace WindowsFormsApplication1
                         }
                     }
                 }
-            for (int j = 1; j < 256; j++)
-                for (int i = 1; i < 256; i++)
-                {
-                   
-                    if (BasisOfWalsh[i, j] == -1)
-                    {
-                        int n = j;
-                        
-                        for (int k = 128; k >= 1; k = k / 2)
-                        {
-                            if (k <= n)
-                            {
-                                BasisOfWalsh[i, j] += BasisOfWalsh[i, k];
-                                n = n - k;
-                            }
-                        }
-                    }
-                }
+            //for (int j = 1; j < 256; j++)
+            //    for (int i = 1; i < 256; i++)
+            //    {
+            //        BasisOfWalsh[j, i] = 0;
+            //        if (BasisOfWalsh[i, j] == -1)
+            //        {
+            //            BasisOfWalsh[j, i] = 0;
+            //            int n = j;
+            //            for (int k = 128; k >= 1; k = k / 2)
+            //            {
+            //                if (k <= n)
+            //                {
+            //                    BasisOfWalsh[i, j] += BasisOfWalsh[i, k];
+            //                    n = n - k;
+            //                }
+            //            }
+            //        }
+            //    }
             for (int i = 0; i < 256; i++)
             {
                 BasisOfWalsh[0, i] = 1;
                 BasisOfWalsh[i, 0] = 1;
             }
-            for (int a = 0; a < 256; a++)
-                for (int b = 0; b < 256; b++)
+            for (int a = 1; a < 256; a++)
+                for (int b = 1; b < 256; b++)
                 {
                     BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
                 }
@@ -273,7 +273,9 @@ namespace WindowsFormsApplication1
                 BitmapToByteRgb(ref image1, ref byteOfPicture);
 
                 pictureBox1.Image = System.Drawing.Bitmap.FromFile(openFileDialog1.FileName);
-                pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                //pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                    
             }
 
 
@@ -300,8 +302,8 @@ namespace WindowsFormsApplication1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            byte[] bufer = new byte[3 * width * height];
-            ThreeToOne(ref byteOfPicture, ref width, ref height, ref bufer);
+            byte[] buferImage = new byte[3 * width * height];
+            ThreeToOne(ref byteOfPicture, ref width, ref height, ref buferImage);
            // double[] array = new double[3 * width * height];
 
 
@@ -315,13 +317,12 @@ namespace WindowsFormsApplication1
                 for (int j = 0; j < 8; j++)
                 {
                     firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
-
                 }
             GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
 
-            coefficients = FastWalsTransform(ref bufer, ref firstBasis);
+            coefficientsOfWalsh = FastWalsTransform(ref buferImage, ref firstBasis);
 
-            Array.Clear(bufer, 0, bufer.Length);
+            Array.Clear(buferImage, 0, buferImage.Length);
 
             //swapRowsColumns(ref array, width);
             //for (int i = 0; i < 8; i++)
@@ -358,7 +359,7 @@ namespace WindowsFormsApplication1
 
                 }
             GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
-            Image = WHT_double_in_byte(ref coefficients,ref firstBasis);
+            Image = WHT_double_in_byte(ref coefficientsOfWalsh,ref firstBasis);
 
         }
 
