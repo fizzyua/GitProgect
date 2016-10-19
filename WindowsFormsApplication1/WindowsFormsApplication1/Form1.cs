@@ -224,14 +224,23 @@ namespace WindowsFormsApplication1
             //    BasisOfWalsh[0, i] = 1;
             //    BasisOfWalsh[i, 0] = 1;
             //}
-            for (int a = 1; a < 256; a++)
-                for (int b = 1; b < 256; b++)
+            //for (int a = 1; a < 256; a++)
+            //    for (int b = 1; b < 256; b++)
+            //    {
+            //        BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
+            //        if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+
+            //    }
+            //попробу исправить ????
+            for (int a = 0; a < 256; a++)
+                for (int b = 0; b < 256; b++)
                 {
                     BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
-                    if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+                    if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = 1;
+                    else BasisOfWalsh[a, b] = -1;
 
                 }
-      
+
         }//Создание базиса на основе индексной матрици
 
         public static double[,] GetMinor(double[,] matrix, int row, int column)
@@ -344,7 +353,16 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            string[] S = new string[3 * width * height];
+            for (int i = 0; i < coefficientsOfWalsh.Length; i++)
+            {
+                S[i] = Convert.ToString(coefficientsOfWalsh[i]);
+            }
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", S);
+            }
+            Array.Clear(S, 0, S.Length);
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -385,21 +403,41 @@ namespace WindowsFormsApplication1
                 {
                 if ((Image[i]>0)&& Image[i] < 255)
                     Masiv[i] = Convert.ToByte(Image[i]);
-                if (Masiv[i]>255) Masiv[i] = Convert.ToByte(250);
+                if (Masiv[i]>255) Masiv[i] = Convert.ToByte(252);
                 if (Masiv[i] < 0) Masiv[i] = Convert.ToByte(0);
             }
                 byte[,,] Kartinca = new byte[3, height, width];
                  OneToThree<byte>(ref Masiv,ref width, ref height, ref Kartinca);
                Bitmap image123 = ByteRgbToBitmap(Kartinca, width,  height);
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                image123.Save(saveFileDialog1.FileName);
-            }
+            //if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            //{
+            //    image123.Save(saveFileDialog1.FileName);
+            //}
+            pictureBox2.Image = image123;
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
+            Bitmap image1 = new Bitmap(pictureBox2.Image);
+            byte[,,] byteOfpicture1 = new byte[3, width, height];
+            BitmapToByteRgb(ref image1, ref byteOfpicture1);
+            byte[] Bufer = new byte[3 * width * height];
+            ThreeToOne(ref byteOfpicture1, ref width, ref height, ref Bufer);
 
+            
+
+            string[] S = new string[3 * width * height];
+            for (int i = 0; i < Bufer.Length; i++)
+            {
+                S[i] = Convert.ToString(Bufer[i]);
+            }
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllLines(saveFileDialog1.FileName + ".txt", S);
+            }
+            Array.Clear(S, 0, S.Length);
+            Array.Clear(Bufer, 0, Bufer.Length);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -479,7 +517,7 @@ namespace WindowsFormsApplication1
                     for (int i = 0; i < 8; i++)
                         for (int j = 0; j < 8; j++)
                         {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView2.Rows[j].Cells[i].Value);
+                            Matrix[i, j] = Convert.ToDouble(dataGridView2.Rows[i].Cells[j].Value);
                         }
                     double det;
                     det = Determ(Matrix);
@@ -493,7 +531,7 @@ namespace WindowsFormsApplication1
                     for (int i = 0; i < 8; i++)
                         for (int j = 0; j < 8; j++)
                         {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
+                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[i].Cells[j].Value);
                         }
                     double det;
                     det = Determ(Matrix);
@@ -502,6 +540,15 @@ namespace WindowsFormsApplication1
 
                 }
 
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap image1 = new Bitmap(pictureBox2.Image);
+                image1.Save(saveFileDialog1.FileName);                
             }
         }
     }

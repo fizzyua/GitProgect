@@ -127,13 +127,22 @@ namespace WindowsFormsApplication2
             //    BasisOfWalsh[0, i] = -1;
             //    BasisOfWalsh[i, 0] = -1;
             //}
-            for (int a = 1; a < 256; a++)
-                for (int b = 1; b < 256; b++)
+            //for (int a = 1; a < 256; a++)
+            //    for (int b = 1; b < 256; b++)
+            //    {
+            //        BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
+            //        if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+
+            //    }
+            for (int a = 0; a < 256; a++)
+                for (int b = 0; b < 256; b++)
                 {
                     BasisOfWalsh[a, b] = BasisOfWalsh[a, b] % 2;
                     if (BasisOfWalsh[a, b] == 0) BasisOfWalsh[a, b] = -1;
+                    else BasisOfWalsh[a, b] = 1;
 
                 }
+
 
         }//Создание базиса на основе индексной матрици
 
