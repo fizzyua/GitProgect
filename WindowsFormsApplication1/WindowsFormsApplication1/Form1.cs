@@ -79,14 +79,20 @@ namespace WindowsFormsApplication1
             }
         }//картинку в масив байтов
 
-        public static void ByteRgbToBitmap(ref byte[,,] byteOfPicture, ref int width, ref int height, ref Bitmap Picture)
+        public static Bitmap ByteRgbToBitmap(byte[,,] bmpData, int width, int height)
         {
-            Picture = new Bitmap(width, height);
+            if ((width * height * 3) != bmpData.Length)
+                throw new ArgumentException();
+            Bitmap bmp = new Bitmap(width, height);
+
+
             for (int x = 0; x < height; x++)
                 for (int y = 0; y < width; y++)
                 {
-                    Picture.SetPixel(y, x, Color.FromArgb(byteOfPicture[0, x, y], byteOfPicture[1, x, y], byteOfPicture[2, x, y]));
+                    bmp.SetPixel(y, x, Color.FromArgb(bmpData[0, x, y], bmpData[1, x, y], bmpData[2, x, y]));
                 }
+
+            return bmp;
         }//масив байтов в картинку
 
         public static void ThreeToOne<T>(ref T[,,] byteOfPicture3, ref int width, ref int height, ref T[] byteOfPicture1)
@@ -206,18 +212,18 @@ namespace WindowsFormsApplication1
                         {
                         if (k <= n)
                         {
-                            BasisOfWalsh[i, j] += (int)BasisOfWalsh[k, j];
+                            BasisOfWalsh[i, j] += BasisOfWalsh[k, j];
                                 n = n - k;
                             }
                         }
                     }
                 }
 
-            for (int i = 0; i < 256; i++)
-            {
-                BasisOfWalsh[0, i] = 1;
-                BasisOfWalsh[i, 0] = 1;
-            }
+            //for (int i = 0; i < 256; i++)
+            //{
+            //    BasisOfWalsh[0, i] = 1;
+            //    BasisOfWalsh[i, 0] = 1;
+            //}
             for (int a = 1; a < 256; a++)
                 for (int b = 1; b < 256; b++)
                 {
@@ -300,40 +306,39 @@ namespace WindowsFormsApplication1
         {
             byte[] buferImage = new byte[3 * width * height];
             ThreeToOne(ref byteOfPicture, ref width, ref height, ref buferImage);
-           // double[] array = new double[3 * width * height];
-
-
+            double[] array = new double[3 * width * height];
+            
             int[,] firstMatrix = new int[8, 8];
             int[,] firstBasis = new int[256, 256];
 
-           
-
+          
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                 {
                     firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
                 }
+
             GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
 
-            coefficientsOfWalsh = FastWalsTransform(ref buferImage, ref firstBasis);
-
+            array = FastWalsTransform(ref buferImage, ref firstBasis);
             Array.Clear(buferImage, 0, buferImage.Length);
 
-           
-
-            //swapRowsColumns(ref array, width);
-            //for (int i = 0; i < 8; i++)
-            //    for (int j = 0; j < 8; j++)
-            //    {
-            //        secondMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
-
-            //    }
-            //GenereteBasisOfWals(ref secondMatrix, ref secondBasis);
-
-            //coefficients = FastWalsTransform(ref array, ref secondBasis);
+            swapRowsColumns(ref array , width);
 
 
+            int[,] secondMatrix = new int[8, 8];
+            int[,] secondBasis = new int[256, 256];
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    secondMatrix[i, j] = Convert.ToInt16(dataGridView2.Rows[i].Cells[j].Value);
 
+                }
+
+            GenereteBasisOfWals(ref secondMatrix, ref secondBasis);
+
+            coefficientsOfWalsh = FastWalsTransform(ref array, ref secondBasis);
+            Array.Clear(array, 0, array.Length);
         }
 
 
@@ -344,7 +349,7 @@ namespace WindowsFormsApplication1
 
         private void button5_Click(object sender, EventArgs e)
         {
-            double[] Image = new double[3 * width * height];
+            double[] BuferImage = new double[3 * width * height];
 
             int[,] firstMatrix = new int[8, 8];
             int[,] firstBasis = new int[256, 256];
@@ -352,12 +357,44 @@ namespace WindowsFormsApplication1
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                 {
-                    firstMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
+                    firstMatrix[i, j] = Convert.ToInt16(dataGridView2.Rows[i].Cells[j].Value);
+                }
+
+            GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
+
+            BuferImage = WHT_double_in_byte(ref coefficientsOfWalsh,ref firstBasis);
+
+            swapRowsColumns(ref BuferImage, width);
+
+            int[,] secondMatrix = new int[8, 8];
+            int[,] secondBasis = new int[256, 256];
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    secondMatrix[i, j] = Convert.ToInt16(dataGridView1.Rows[i].Cells[j].Value);
 
                 }
-            GenereteBasisOfWals(ref firstMatrix, ref firstBasis);
-            Image = WHT_double_in_byte(ref coefficientsOfWalsh,ref firstBasis);
+             GenereteBasisOfWals(ref secondMatrix, ref secondBasis);
 
+             double []  Image = new double[3 * width * height];
+
+            Image = WHT_double_in_byte(ref BuferImage, ref secondBasis);
+
+               byte[] Masiv = new byte[3 * height * width];
+               for (int i = 0; i < Image.Length; i++)
+                {
+                if ((Image[i]>0)&& Image[i] < 255)
+                    Masiv[i] = Convert.ToByte(Image[i]);
+                if (Masiv[i]>255) Masiv[i] = Convert.ToByte(250);
+                if (Masiv[i] < 0) Masiv[i] = Convert.ToByte(0);
+            }
+                byte[,,] Kartinca = new byte[3, height, width];
+                 OneToThree<byte>(ref Masiv,ref width, ref height, ref Kartinca);
+               Bitmap image123 = ByteRgbToBitmap(Kartinca, width,  height);
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                image123.Save(saveFileDialog1.FileName);
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
