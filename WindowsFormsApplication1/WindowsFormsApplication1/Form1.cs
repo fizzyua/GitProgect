@@ -398,15 +398,29 @@ namespace WindowsFormsApplication1
 
             Image = WHT_double_in_byte(ref BuferImage, ref secondBasis);
 
-               byte[] Masiv = new byte[3 * height * width];
-               for (int i = 0; i < Image.Length; i++)
-                {
-                if ((Image[i]>0)&& Image[i] < 255)
-                    Masiv[i] = Convert.ToByte(Image[i]);
-                if (Masiv[i]>255) Masiv[i] = Convert.ToByte(252);
-                if (Masiv[i] < 0) Masiv[i] = Convert.ToByte(0);
+            //filter//
+
+            //for (int chn = 0; chn < Image.Length; chn += width * height)
+            //    for (int j = 0; j < Image.Length / 3; j += height)
+            //        for (int i = 0; i < width; i++)
+            //        {
+            //            if ((i < width) && (Image[i + j + chn] > 256)) Image[i + j + chn] = Image[i + j + chn];
+            //        }
+
+
+            byte[] Masiv = new byte[3 * height * width];
+
+            for (int i = 0; i < Image.Length; i++)
+            {
+                if ((Image[i] > 0) && Image[i] <= 255) Masiv[i] = Convert.ToByte(Image[i]);
+                if (Image[i] < 0) Masiv[i] = Convert.ToByte(0);
+                if (Image[i] > 255) Masiv[i] = Convert.ToByte(255);
             }
-                byte[,,] Kartinca = new byte[3, height, width];
+
+
+
+
+            byte[,,] Kartinca = new byte[3, height, width];
                  OneToThree<byte>(ref Masiv,ref width, ref height, ref Kartinca);
                Bitmap image123 = ByteRgbToBitmap(Kartinca, width,  height);
             //if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -478,67 +492,50 @@ namespace WindowsFormsApplication1
                 {
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 1;
                     dataGridView1.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 1;
-                    for (int i = 0; i < 8; i++)
-                        for (int j = 0; j < 8; j++)
-                        {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
-                        }
-                    double det;
-                    det = Determ(Matrix);
-                    label3.Text = "Det= " +Convert.ToString(det);
+
                 }
                 else
                 {
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 0;
                     dataGridView1.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 0;
-                    for (int i = 0; i < 8; i++)
-                        for (int j = 0; j < 8; j++)
-                        {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
-                        }
-                    double det;
-                    det = Determ(Matrix);
-                    label3.Text = "Det= " + Convert.ToString(det);
                 }
+                for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
+                    }
+                double det;
+                det = Determ(Matrix);
+                label3.Text = "Det= " + Convert.ToString(det);
             }
         }
 
         private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
-            double[,] Matrix = new double[8, 8];
+            double[,] Matrix1 = new double[8, 8];
 
             if ((e.RowIndex == 0 && e.ColumnIndex < 8) || (e.RowIndex == 1 && e.ColumnIndex < 7) || (e.RowIndex == 2 && e.ColumnIndex < 6) || (e.RowIndex == 3 && e.ColumnIndex < 5) || (e.RowIndex == 4 && e.ColumnIndex < 4) || (e.RowIndex == 5 && e.ColumnIndex < 3) || (e.RowIndex == 6 && e.ColumnIndex < 2) || (e.RowIndex == 7 && e.ColumnIndex < 1))
             {
                 if (Convert.ToString(dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == "0")
                 {
                     dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 1;
-                    dataGridView2.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 1;
-                    for (int i = 0; i < 8; i++)
-                        for (int j = 0; j < 8; j++)
-                        {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView2.Rows[i].Cells[j].Value);
-                        }
-                    double det;
-                    det = Determ(Matrix);
-                    label4.Text = "Det= " + Convert.ToString(det);
+                    dataGridView2.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 1;                   
                 }
 
                 else
                 {
                     dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 0;
                     dataGridView2.Rows[7 - e.ColumnIndex].Cells[7 - e.RowIndex].Value = 0;
-                    for (int i = 0; i < 8; i++)
-                        for (int j = 0; j < 8; j++)
-                        {
-                            Matrix[i, j] = Convert.ToDouble(dataGridView1.Rows[i].Cells[j].Value);
-                        }
-                    double det;
-                    det = Determ(Matrix);
-                    label4.Text = "Det= " + Convert.ToString(det);
-
-
                 }
+                for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Matrix1[i, j] = Convert.ToDouble(dataGridView2.Rows[j].Cells[i].Value);
+                    }
+                double det;
+                det = Determ(Matrix1);
+                label4.Text = "Det= " + Convert.ToString(det);
 
             }
         }
